@@ -10,13 +10,13 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "UserProfile")
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public abstract class User extends AbstractPersistable<Long> {
+public abstract class UserProfile extends AbstractPersistable<Long> {
 
     @Basic(optional = false)
     private String name;
