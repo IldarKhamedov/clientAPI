@@ -11,4 +11,8 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,String>
 
     @Query("SELECT u FROM UserProfile u WHERE u.name=:name AND u.blocked=FALSE")
     UserProfile findByName(@Param("name")String name);
+
+    @Query("SELECT COUNT(u)>0 FROM UserProfile u WHERE u.name=:name")
+    boolean checkByName(@Param("name")String name);
+
 }

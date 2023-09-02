@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -18,7 +19,8 @@ import java.util.List;
 @Setter
 public abstract class UserProfile extends AbstractPersistable<Long> {
 
-    @Basic(optional = false)
+
+    @Column(unique = true,nullable = false)
     private String name;
 
     @Basic(optional = false)
@@ -28,5 +30,5 @@ public abstract class UserProfile extends AbstractPersistable<Long> {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false,name = "userprofile_id")
-    private List<Contact> contactList=new ArrayList<>();
+    private Set<Contact> contactSet =new HashSet<>();
 }
