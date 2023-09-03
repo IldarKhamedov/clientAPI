@@ -22,6 +22,8 @@ public class Constant {
 
     public static final String CONTACT_ERROR="Данный тип контакта недоступен";
 
+    public static final String CONTACT_INFORMATION_ERROR="Неправильный формат контакта";
+
     private static Map<String,Class<? extends UserProfile>> userMap;
     private static Map<String,Class<? extends Contact>> contactMap;
 

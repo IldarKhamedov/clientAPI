@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Описание ошибки для response.
+ */
 public class JsonError {
 
     private int code;

@@ -36,6 +36,11 @@ public class UserService {
     @Resource
     private AuthService authService;
 
+    /**
+     * Создание нового пользователя.
+     * @param userDTO
+     * @param type
+     */
     public UserProfile createUser(UserDTO userDTO, String type) {
         Class clazz= checkClass(type);
         checkName(userDTO.getName());
@@ -45,6 +50,11 @@ public class UserService {
         return userProfile;
     }
 
+    /**
+     * Заполнение контактов пользователя.
+     * @param userDTO
+     * @param userProfile
+     */
     private void fillContact(UserDTO userDTO, UserProfile userProfile) {
         if (userDTO.getContactDTOList().isEmpty()) {
             return;
@@ -53,36 +63,60 @@ public class UserService {
         userProfile.setContactSet(contactSet);
     }
 
+    /**
+     * Проверка имени - занято ли уже другим пользователем.
+     * @param name
+     */
     private void checkName(String name){
         if(userProfileRepository.checkByName(name)){
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,name + "-" + Constant.USER_NAME_ERROR);
         }
     }
 
+    /**
+     * Определение класса добавляемого пользователя по переданному типу.
+     * @param type
+     */
     public Class checkClass(String type){
         checkType(type);
         return Constant.USER_MAP.get(type);
     }
 
-    public boolean checkType(String type){
+    /**
+     * Проверка на допустимость переданного типа.
+     * @param type
+     */
+    public void checkType(String type){
         if (!Constant.USER_MAP.containsKey(type)) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,type + "-" + Constant.USER_TYPE_ERROR);
         }
-        return true;
     }
 
+    /**
+     * Получение списка пользователей.
+     * @param type
+     */
     public List<SimpleUserDto> getSimpleUserDTOList(String type){
         checkType(type);
         List<? extends UserProfile> userList=clientRepository.findByNotBlocked();
         return userList.stream().map(u -> modelMapperService.convertToSimpleUserDTO(u)).collect(Collectors.toList());
     }
 
+    /**
+     * Получение пользователя по Id.
+     * @param type
+     * @param id
+     */
     public SimpleUserDto getSimpleUserDTO(String type,Long id){
         checkType(type);
         UserProfile userProfile=userProfileRepository.findById(id).get();
         return modelMapperService.convertToSimpleUserDTO(userProfile);
     }
 
+    /**
+     * Добавление контакта пользователю по типу.
+     * @param contactDTO
+     */
     public boolean addContact(ContactDTO contactDTO){
         UserProfile user=authService.getUser();
         Contact contact=contactService.createContact(contactDTO.getContactType(),contactDTO.getInformation());

@@ -13,11 +13,20 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 @AllArgsConstructor
 @Getter
 @Setter
+/**
+ * Контакт пользователя.
+ */
 public class Contact extends AbstractPersistable<Long> {
 
     @Basic(optional = false)
+    /**
+     * Информация по контакту.
+     */
     private String information;
 
+    /**
+     * Активный ли.
+     */
     private boolean active=true;
 
     @Override

@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+/**
+ * Сервис для получения типа контакта.
+ */
 public class ContactTypeService {
 
     private static final int INDEX_FILTERED_CONTACT_TYPE = 0;

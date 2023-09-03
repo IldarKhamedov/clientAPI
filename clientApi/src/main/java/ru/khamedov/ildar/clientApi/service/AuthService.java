@@ -7,6 +7,9 @@ import ru.khamedov.ildar.clientApi.model.UserProfile;
 import ru.khamedov.ildar.clientApi.repository.UserProfileRepository;
 
 @Service
+/**
+ * Сервис для получения авторизованного пользователя.
+ */
 public class AuthService {
 
     @Resource
