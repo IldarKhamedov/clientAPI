@@ -19,6 +19,9 @@ public class ModelMapperService {
     @Resource
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private ContactTypeService contactTypeService;
+
     public UserProfile convertToUser(UserDTO userDTO,Class clazz){
         addMappings(modelMapper,clazz);
         return (UserProfile) modelMapper.map(userDTO,clazz);
@@ -35,20 +38,12 @@ public class ModelMapperService {
     }
 
     public ContactDTO convertToContactDTO(Contact contact){
-
         ContactDTO contactDTO= modelMapper.map(contact,ContactDTO.class);
         updateContactType(contact,contactDTO);
         return contactDTO;
     }
 
     private void updateContactType(Contact contact,ContactDTO contactDTO){
-        ContactType contactType=null;
-        if(contact instanceof PhoneContact){
-            contactType= ContactType.PHONE;
-        }
-        if(contact instanceof EmailContact){
-            contactType= ContactType.EMAIL;
-        }
-        contactDTO.setContactType(contactType);
+        contactDTO.setContactType(contactTypeService.getByContact(contact));
     }
 }

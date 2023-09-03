@@ -1,5 +1,9 @@
 package ru.khamedov.ildar.clientApi.util;
 
+import ru.khamedov.ildar.clientApi.model.*;
+
+import java.util.*;
+
 public class Constant {
 
     public static final String AUTHORITY_ROLE="ROLE_USER";
@@ -17,6 +21,22 @@ public class Constant {
     public static final String EMAIL_CONTACT="email";
 
     public static final String CONTACT_ERROR="Данный тип контакта недоступен";
+
+    private static Map<String,Class<? extends UserProfile>> userMap;
+    private static Map<String,Class<? extends Contact>> contactMap;
+
+    static {
+        userMap=new HashMap<>();
+        userMap.put(CLIENT,Client.class);
+
+        contactMap=new HashMap<>();
+        contactMap.put(PHONE_CONTACT, PhoneContact.class);
+        contactMap.put(EMAIL_CONTACT, EmailContact.class);
+    }
+
+    public static final Map<String,Class<? extends UserProfile>> USER_MAP= Collections.unmodifiableMap(userMap);
+
+    public static final Map<String,Class<? extends Contact>> CONTACT_MAP= Collections.unmodifiableMap(contactMap);
 
 
 

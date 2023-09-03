@@ -1,6 +1,19 @@
 package ru.khamedov.ildar.clientApi.model;
 
 public enum ContactType {
-    PHONE,
-    EMAIL
+    PHONE(new PhoneContact()),
+    EMAIL(new EmailContact()),
+    CONTACT(new Contact());
+
+    private Contact contact;
+
+    ContactType(Contact contact) {
+        this.contact = contact;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+
 }

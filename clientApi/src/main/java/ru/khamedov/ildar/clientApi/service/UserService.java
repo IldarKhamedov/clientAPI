@@ -7,7 +7,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import ru.khamedov.ildar.clientApi.dto.ContactDTO;
 import ru.khamedov.ildar.clientApi.dto.SimpleUserDto;
 import ru.khamedov.ildar.clientApi.dto.UserDTO;
-import ru.khamedov.ildar.clientApi.model.Client;
 import ru.khamedov.ildar.clientApi.model.Contact;
 import ru.khamedov.ildar.clientApi.model.UserProfile;
 import ru.khamedov.ildar.clientApi.repository.ClientRepository;
@@ -38,7 +37,7 @@ public class UserService {
     private AuthService authService;
 
     public UserProfile createUser(UserDTO userDTO, String type) {
-        Class clazz=checkType(type);
+        Class clazz= checkClass(type);
         checkName(userDTO.getName());
         UserProfile userProfile = modelMapperService.convertToUser(userDTO,clazz);
         fillContact(userDTO,userProfile);
@@ -60,30 +59,27 @@ public class UserService {
         }
     }
 
-    public Class checkType(String type){
-        Class clazz=null;
-        if (Constant.CLIENT.equals(type)) {
-            clazz= Client.class;
-        }
-        if (clazz == null) {
+    public Class checkClass(String type){
+        checkType(type);
+        return Constant.USER_MAP.get(type);
+    }
+
+    public boolean checkType(String type){
+        if (!Constant.USER_MAP.containsKey(type)) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,type + "-" + Constant.USER_TYPE_ERROR);
         }
-        return clazz;
+        return true;
     }
 
     public List<SimpleUserDto> getSimpleUserDTOList(String type){
-        List<? extends UserProfile> userList=null;
-        if(checkType(type)==Client.class){
-            userList=clientRepository.findByNotBlocked();
-        }
+        checkType(type);
+        List<? extends UserProfile> userList=clientRepository.findByNotBlocked();
         return userList.stream().map(u -> modelMapperService.convertToSimpleUserDTO(u)).collect(Collectors.toList());
     }
 
     public SimpleUserDto getSimpleUserDTO(String type,Long id){
-        UserProfile userProfile=null;
-        if(checkType(type)==Client.class){
-            userProfile=userProfileRepository.findById(id).get();
-        }
+        checkType(type);
+        UserProfile userProfile=userProfileRepository.findById(id).get();
         return modelMapperService.convertToSimpleUserDTO(userProfile);
     }
 
