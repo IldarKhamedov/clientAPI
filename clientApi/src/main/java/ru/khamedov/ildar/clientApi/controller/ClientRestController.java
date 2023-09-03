@@ -19,7 +19,7 @@ public class ClientRestController {
     private UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity createPost(@PathVariable(required = true)String type, @RequestBody UserDTO userDTO){
+    public ResponseEntity createUser(@PathVariable(required = true)String type, @RequestBody UserDTO userDTO){
         UserProfile userProfile=userService.createUser(userDTO,type);
         return new ResponseEntity(userProfile.getId(), HttpStatus.OK);
     }
@@ -28,5 +28,11 @@ public class ClientRestController {
     public ResponseEntity getUsers(@PathVariable(required = true)String type){
         List<SimpleUserDto> simpleUserDtoList=userService.getSimpleUserDTOList(type);
         return new ResponseEntity(simpleUserDtoList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getUser(@PathVariable(required = true)String type,@PathVariable(required = true)Long id){
+        SimpleUserDto simpleUserDto=userService.getSimpleUserDTO(type,id);
+        return new ResponseEntity(simpleUserDto, HttpStatus.OK);
     }
 }

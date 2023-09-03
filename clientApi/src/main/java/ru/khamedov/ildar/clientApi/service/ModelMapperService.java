@@ -5,9 +5,10 @@ import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.khamedov.ildar.clientApi.dto.ContactDTO;
 import ru.khamedov.ildar.clientApi.dto.SimpleUserDto;
 import ru.khamedov.ildar.clientApi.dto.UserDTO;
-import ru.khamedov.ildar.clientApi.model.UserProfile;
+import ru.khamedov.ildar.clientApi.model.*;
 
 @Service
 public class ModelMapperService {
@@ -31,5 +32,23 @@ public class ModelMapperService {
 
     public SimpleUserDto convertToSimpleUserDTO(UserProfile userProfile){
         return modelMapper.map(userProfile,SimpleUserDto.class);
+    }
+
+    public ContactDTO convertToContactDTO(Contact contact){
+
+        ContactDTO contactDTO= modelMapper.map(contact,ContactDTO.class);
+        updateContactType(contact,contactDTO);
+        return contactDTO;
+    }
+
+    private void updateContactType(Contact contact,ContactDTO contactDTO){
+        ContactType contactType=null;
+        if(contact instanceof PhoneContact){
+            contactType= ContactType.PHONE;
+        }
+        if(contact instanceof EmailContact){
+            contactType= ContactType.EMAIL;
+        }
+        contactDTO.setContactType(contactType);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.khamedov.ildar.clientApi.model.UserProfile;
 
 @Repository
-public interface UserProfileRepository extends JpaRepository<UserProfile,String> {
+public interface UserProfileRepository extends JpaRepository<UserProfile,Long> {
 
     @Query("SELECT u FROM UserProfile u WHERE u.name=:name AND u.blocked=FALSE")
     UserProfile findByName(@Param("name")String name);

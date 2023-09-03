@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import ru.khamedov.ildar.clientApi.dto.ContactDTO;
 import ru.khamedov.ildar.clientApi.dto.SimpleUserDto;
 import ru.khamedov.ildar.clientApi.dto.UserDTO;
 import ru.khamedov.ildar.clientApi.model.Client;
@@ -32,6 +33,9 @@ public class UserService {
 
     @Resource
     private ContactService contactService;
+
+    @Resource
+    private AuthService authService;
 
     public UserProfile createUser(UserDTO userDTO, String type) {
         Class clazz=checkType(type);
@@ -74,4 +78,22 @@ public class UserService {
         }
         return userList.stream().map(u -> modelMapperService.convertToSimpleUserDTO(u)).collect(Collectors.toList());
     }
+
+    public SimpleUserDto getSimpleUserDTO(String type,Long id){
+        UserProfile userProfile=null;
+        if(checkType(type)==Client.class){
+            userProfile=userProfileRepository.findById(id).get();
+        }
+        return modelMapperService.convertToSimpleUserDTO(userProfile);
+    }
+
+    public boolean addContact(ContactDTO contactDTO){
+        UserProfile user=authService.getUser();
+        Contact contact=contactService.createContact(contactDTO.getContactType(),contactDTO.getInformation());
+        user.getContactSet().add(contact);
+        userProfileRepository.save(user);
+        return user.getContactSet().contains(contact);
+    }
+
+
 }

@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.khamedov.ildar.clientApi.model.UserProfile;
 import ru.khamedov.ildar.clientApi.repository.UserProfileRepository;
-import ru.khamedov.ildar.clientApi.service.AuthService;
 import ru.khamedov.ildar.clientApi.util.Constant;
 
 import java.util.ArrayList;
@@ -23,12 +22,12 @@ public class UserProfileDetailService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Resource
-    private AuthService authService;
+    private UserProfileRepository userProfileRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        UserProfile user=authService.getUser();
+        UserProfile user=userProfileRepository.findByName(username);
         authorities.add(new SimpleGrantedAuthority(Constant.AUTHORITY_ROLE));
         return new User(user.getName(), user.getPassword(), !user.isBlocked(),true, true, true, authorities);
     }
